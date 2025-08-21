@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./DonationModal.module.css";
 
 export type DonationBinaryChoice = "support" | "free";
@@ -16,35 +16,65 @@ export default function DonationModal({
   onClose,
   onChoose,
 }: DonationModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen, onClose]);
+
+  const handleBackdropClick = (event: React.MouseEvent) => {
+    if (event.target === modalRef.current) {
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modalOverlay}>
-      <div
-        className={`${styles.modalContent} ${styles.fullscreen}`}
-        role="dialog"
-        aria-modal
-      >
-        {/* Grille des choix */}
-        <div className={styles.splitGrid}>
-          {/* Choix 1: Soutien */}
+    <div
+      className={styles.modalOverlay}
+      ref={modalRef}
+      onClick={handleBackdropClick}
+      role="dialog"
+      aria-modal
+      aria-label="Сделайте выбор"
+    >
+      <div className={styles.modalContent}>
+        <h2 className={styles.modalTitle}>
+          Вы хотите поддержать меня донатом?
+        </h2>
+        <p className={styles.modalSubtitle}>
+          Это позволит мне продолжать работу!
+        </p>
+        <div className={styles.actions}>
           <button
-            className={`${styles.pane} ${styles.paneSupport}`}
+            className={`${styles.button} ${styles.primary}`}
             onClick={() => onChoose("support")}
+            autoFocus
+            aria-label="Да, поддержать"
           >
-            <div className={styles.paneInner}>
-              <h3 className={styles.headline}>Помочь с донатом</h3>
-            </div>
+            Да
           </button>
-
-          {/* Choix 2: Gratuit */}
           <button
-            className={`${styles.pane} ${styles.paneFree}`}
+            className={`${styles.button} ${styles.secondary}`}
             onClick={() => onChoose("free")}
+            aria-label="Нет"
           >
-            <div className={styles.paneInner}>
-              <h3 className={styles.headline}>Получить бесплатно</h3>
-            </div>
+            Нет
           </button>
         </div>
       </div>

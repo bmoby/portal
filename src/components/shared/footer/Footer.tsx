@@ -3,9 +3,11 @@
 import React from "react";
 import styles from "./Footer.module.css";
 
-const instagramUrl = process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || "#";
-const tiktokUrl = process.env.NEXT_PUBLIC_SOCIAL_TIKTOK || "#";
-const telegramUrl = process.env.NEXT_PUBLIC_SOCIAL_TELEGRAM || "#";
+const youtubeUrl = "https://www.youtube.com/@Tsarag";
+const telegramUrl = "https://t.me/tsarag_ch";
+const instagramUrl =
+  "https://www.instagram.com/strasbourgov?igsh=MXQ4amo5bnB4b3VtcQ%3D%3D&utm_source=qr";
+const tiktokUrl = "https://www.tiktok.com/@tsarag?_t=ZN-8z4Y8mTozah&_r=1";
 
 export default function Footer() {
   return (
@@ -13,6 +15,20 @@ export default function Footer() {
       <div className={styles.inner}>
         <div className={styles.brand}>PORTAL</div>
         <nav className={styles.socials} aria-label="Réseaux sociaux">
+          <a
+            className={styles.link}
+            href={youtubeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+          >
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden>
+              <path
+                fill="currentColor"
+                d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.3-1.9.5-3.8.5-5.8s-.2-3.9-.5-5.8zM9.8 15.5v-7l6.2 3.5-6.2 3.5z"
+              />
+            </svg>
+          </a>
           <a
             className={styles.link}
             href={instagramUrl}

@@ -14,6 +14,7 @@ export type VideoCardProps = {
     csv?: string;
   };
   onOpenCSV?: () => void;
+  onOpenRoadmap?: () => void;
 };
 
 export default function VideoCard({
@@ -26,6 +27,7 @@ export default function VideoCard({
   className,
   resources,
   onOpenCSV,
+  onOpenRoadmap,
 }: VideoCardProps) {
   const isPlayable = Boolean(
     youtubeVideoId && youtubeVideoId.trim().length > 0
@@ -65,12 +67,12 @@ export default function VideoCard({
         {resources && (
           <div className={styles.resources}>
             {resources.roadmap && (
-              <a
-                href={resources.roadmap}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
                 className={styles.resourceLink}
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenRoadmap?.();
+                }}
               >
                 <svg
                   className={styles.resourceIcon}
@@ -80,7 +82,7 @@ export default function VideoCard({
                   <path d="M10 6L8.59 7.41L13.17 12l-4.58 4.59L10 18l6-6z" />
                 </svg>
                 Карта
-              </a>
+              </button>
             )}
             {resources.csv && (
               <button
