@@ -1,8 +1,10 @@
-type EventPayload = Record<string, any>;
+type EventPayload = Record<string, unknown>;
+
+type DataLayerEvent = { event: string } & EventPayload;
 
 declare global {
   interface Window {
-    dataLayer?: any[];
+    dataLayer?: DataLayerEvent[];
   }
 }
 

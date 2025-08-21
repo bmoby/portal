@@ -35,7 +35,7 @@ export function initClientTracking() {
 
   // Cleanup
   return () => {
-    window.removeEventListener("scroll", onScroll as any);
+    window.removeEventListener("scroll", onScroll);
     clearInterval(interval);
   };
 }
