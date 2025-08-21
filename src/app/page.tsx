@@ -1,103 +1,230 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Teleport } from "@/components/shared/teleport";
+import { VideoCard, VideoModal, Footer, CSVModal } from "@/components/shared";
+import { StartOverlay, DonationModal } from "@/components/shared/donations";
+import type { DonationBinaryChoice } from "@/components/shared/donations";
+import { getDonationAlertsUrl } from "@/services/donationService";
+import styles from "./page.module.css";
+import { initClientTracking } from "@/helpers/tracking/initClientTracking";
+import {
+  trackStartClick,
+  trackDonationChoice,
+  trackVideoPlay,
+  trackCsvOpen,
+} from "@/helpers/tracking/events";
+
+// Types
+type CourseData = {
+  id: string;
+  courseNumber: number;
+  title: string;
+  thumbnailUrl: string;
+  youtubeVideoId: string;
+  resources?: {
+    roadmap?: string;
+    csv?: string;
+  };
+};
+
+// Données des cours
+const coursesData: CourseData[] = [
+  {
+    id: "course-1",
+    courseNumber: 1,
+    title: "Презентация курса",
+    thumbnailUrl: "/thumbnails/01.png",
+    youtubeVideoId: "LgWIk3395Bk",
+  },
+  {
+    id: "course-2",
+    courseNumber: 2,
+    title: "Цифровая информация",
+    thumbnailUrl: "/thumbnails/02.png",
+    youtubeVideoId: "25dO4MLTbik",
+  },
+  {
+    id: "course-3",
+    courseNumber: 3,
+    title: "Что такое программирование?",
+    thumbnailUrl: "/thumbnails/03.png",
+    youtubeVideoId: "OIAw5x_p814",
+  },
+  {
+    id: "course-4",
+    courseNumber: 4,
+    title: "Механизм искусственного интеллекта",
+    thumbnailUrl: "/thumbnails/04.png",
+    youtubeVideoId: "99fHgOTgcyU",
+  },
+  {
+    id: "course-5",
+    courseNumber: 5,
+    title: "Профессии в сфере информатики",
+    thumbnailUrl: "/thumbnails/05.png",
+    youtubeVideoId: "QgMOgdthNBA",
+  },
+  {
+    id: "course-6a",
+    courseNumber: 6,
+    title: "Часть 1 - Пути к профессиям в информатике",
+    thumbnailUrl: "/thumbnails/06.png",
+    youtubeVideoId: "PBv-oPXHp6Y",
+    resources: {
+      roadmap: "https://roadmap.sh/r/rdm-e4atc",
+      csv: "learn.csv",
+    },
+  },
+  {
+    id: "course-6b",
+    courseNumber: 7,
+    title: "Часть 2 - Пути к профессиям в информатике",
+    thumbnailUrl: "/thumbnails/06.png",
+    youtubeVideoId: "_ZvtmVBiN-w",
+    resources: {
+      roadmap: "https://roadmap.sh/r/rdm-e4atc",
+      csv: "learn.csv",
+    },
+  },
+  {
+    id: "course-6c",
+    courseNumber: 8,
+    title: "Часть 3 - Пути к профессиям в информатике",
+    thumbnailUrl: "/thumbnails/06.png",
+    youtubeVideoId: "",
+    resources: {
+      roadmap: "https://roadmap.sh/r/rdm-e4atc",
+      csv: "learn.csv",
+    },
+  },
+  {
+    id: "course-9",
+    courseNumber: 9,
+    title: "ломаем стены непонимания",
+    thumbnailUrl: "/thumbnails/07.png",
+    youtubeVideoId: "lhV3Uw6QNow",
+  },
+];
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  // Init tracking once visible (CSR)
+  useState(() => {
+    if (typeof window !== "undefined") {
+      initClientTracking();
+    }
+    return null;
+  });
+  const [isStartOpen, setIsStartOpen] = useState(true);
+  const [isDonationOpen, setIsDonationOpen] = useState(false);
+  const [videosUnlocked, setVideosUnlocked] = useState(false);
+  const [banner, setBanner] = useState<string | null>(null);
+  const [isCSVModalOpen, setIsCSVModalOpen] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  const handleStart = () => {
+    trackStartClick();
+    setIsDonationOpen(true);
+  };
+
+  const handleDonationChoose = async (choice: DonationBinaryChoice) => {
+    setIsDonationOpen(false);
+    if (choice === "support") {
+      const url = getDonationAlertsUrl(undefined, "EUR");
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+    trackDonationChoice(choice);
+
+    setVideosUnlocked(true);
+    setIsStartOpen(false);
+    setBanner("Bon visionnage !");
+    setTimeout(() => setBanner(null), 3000);
+  };
+
+  const handlePlay = (youtubeVideoId: string) => {
+    if (!videosUnlocked) {
+      setBanner("Démarrez pour accéder aux cours");
+      setTimeout(() => setBanner(null), 2000);
+      return;
+    }
+    if (!youtubeVideoId) {
+      setBanner("Bientôt disponible");
+      setTimeout(() => setBanner(null), 2000);
+      return;
+    }
+    trackVideoPlay(youtubeVideoId);
+    setSelectedVideo(youtubeVideoId);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVideo(null);
+  };
+
+  const handleOpenCSV = () => {
+    trackCsvOpen();
+    setIsCSVModalOpen(true);
+  };
+
+  return (
+    <main className={styles.main}>
+      <section
+        className={styles.centerStage}
+        aria-label="Téléportation"
+        style={{
+          position: "relative",
+          minHeight: isStartOpen ? "100dvh" : undefined,
+          transform: isStartOpen ? "translateY(0)" : undefined,
+        }}
+      >
+        <Teleport className={!isStartOpen ? "lifted" : undefined}>
+          {isStartOpen && <StartOverlay onStart={handleStart} />}
+        </Teleport>
+        {!isStartOpen && <div className={styles.portalText} />}
+      </section>
+
+      {videosUnlocked && (
+        <section
+          className={`${styles.courses} ${styles.coursesVisible}`}
+          aria-label="Cours disponibles"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <div className={styles.coursesGrid}>
+            {coursesData.map((course) => (
+              <VideoCard
+                key={course.id}
+                id={course.id}
+                courseNumber={course.courseNumber}
+                title={course.title}
+                thumbnailUrl={course.thumbnailUrl}
+                youtubeVideoId={course.youtubeVideoId}
+                onPlay={handlePlay}
+                resources={course.resources}
+                onOpenCSV={handleOpenCSV}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {banner && <div className={styles.banner}>{banner}</div>}
+
+      <VideoModal
+        isOpen={!!selectedVideo}
+        youtubeVideoId={selectedVideo || ""}
+        onClose={handleCloseModal}
+      />
+
+      <DonationModal
+        isOpen={isDonationOpen}
+        onClose={() => setIsDonationOpen(false)}
+        onChoose={handleDonationChoose}
+      />
+
+      <CSVModal
+        isOpen={isCSVModalOpen}
+        onClose={() => setIsCSVModalOpen(false)}
+      />
+
+      <Footer />
+    </main>
   );
 }

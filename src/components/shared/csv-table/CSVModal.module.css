@@ -1,0 +1,98 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0;
+}
+
+.modalContent {
+  background: linear-gradient(
+    135deg,
+    rgba(17, 24, 39, 0.98),
+    rgba(2, 6, 23, 0.95)
+  );
+  border: none;
+  border-radius: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow: none;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.modalTitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.closeButton {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.closeButton:hover {
+  background: rgba(255, 190, 80, 0.2);
+  border-color: rgba(255, 190, 80, 0.4);
+  color: rgba(255, 190, 80, 1);
+  transform: scale(1.05);
+}
+
+.closeButton svg {
+  width: 24px;
+  height: 24px;
+}
+
+.modalBody {
+  padding: 20px;
+  overflow-y: auto;
+  height: calc(100vh - 80px);
+}
+
+@media (max-width: 768px) {
+  .modalHeader {
+    padding: 16px 20px;
+  }
+
+  .modalTitle {
+    font-size: 18px;
+  }
+
+  .modalBody {
+    padding: 16px;
+  }
+
+  .closeButton {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
