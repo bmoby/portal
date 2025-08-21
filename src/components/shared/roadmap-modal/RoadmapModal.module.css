@@ -1,0 +1,59 @@
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 16px;
+  backdrop-filter: blur(2px);
+}
+
+.modalContent {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  background: #ffffff;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.05);
+}
+
+.closeButton svg {
+  width: 18px;
+  height: 18px;
+  color: white;
+}
+
+.embedContainer {
+  width: 100%;
+  height: 100vh;
+  background: #fff;
+}
+
+/* Fullscreen modal, responsive rules not needed */

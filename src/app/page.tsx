@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { Teleport } from "@/components/shared/teleport";
-import { VideoCard, VideoModal, Footer, CSVModal } from "@/components/shared";
+import {
+  VideoCard,
+  VideoModal,
+  Footer,
+  CSVModal,
+  RoadmapModal,
+} from "@/components/shared";
 import { StartOverlay, DonationModal } from "@/components/shared/donations";
 import type { DonationBinaryChoice } from "@/components/shared/donations";
 import { getDonationAlertsUrl } from "@/services/donationService";
@@ -121,6 +127,7 @@ export default function Home() {
   const [videosUnlocked, setVideosUnlocked] = useState(false);
   const [banner, setBanner] = useState<string | null>(null);
   const [isCSVModalOpen, setIsCSVModalOpen] = useState(false);
+  const [isRoadmapOpen, setIsRoadmapOpen] = useState(false);
 
   const handleStart = () => {
     trackStartClick();
@@ -137,7 +144,7 @@ export default function Home() {
 
     setVideosUnlocked(true);
     setIsStartOpen(false);
-    setBanner("Bon visionnage !");
+    setBanner("Дала аьтты бойла!");
     setTimeout(() => setBanner(null), 3000);
   };
 
@@ -163,6 +170,10 @@ export default function Home() {
   const handleOpenCSV = () => {
     trackCsvOpen();
     setIsCSVModalOpen(true);
+  };
+
+  const handleOpenRoadmap = () => {
+    setIsRoadmapOpen(true);
   };
 
   return (
@@ -199,6 +210,7 @@ export default function Home() {
                 onPlay={handlePlay}
                 resources={course.resources}
                 onOpenCSV={handleOpenCSV}
+                onOpenRoadmap={handleOpenRoadmap}
               />
             ))}
           </div>
@@ -222,6 +234,12 @@ export default function Home() {
       <CSVModal
         isOpen={isCSVModalOpen}
         onClose={() => setIsCSVModalOpen(false)}
+      />
+
+      <RoadmapModal
+        isOpen={isRoadmapOpen}
+        embedId="68831d7086548d698aee6e47"
+        onClose={() => setIsRoadmapOpen(false)}
       />
 
       <Footer />
