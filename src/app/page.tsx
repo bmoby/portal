@@ -8,6 +8,7 @@ import {
   Footer,
   CSVModal,
   RoadmapModal,
+  CryptoWallet,
 } from "@/components/shared";
 import { StartOverlay, DonationModal } from "@/components/shared/donations";
 import type { DonationBinaryChoice } from "@/components/shared/donations";
@@ -213,6 +214,10 @@ export default function Home() {
                 onOpenRoadmap={handleOpenRoadmap}
               />
             ))}
+          </div>
+          
+          <div className={styles.cryptoWalletSection}>
+            <CryptoWallet />
           </div>
         </section>
       )}
