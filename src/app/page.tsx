@@ -99,7 +99,7 @@ const coursesData: CourseData[] = [
     courseNumber: 8,
     title: "Часть 3 - Пути к профессиям в информатике",
     thumbnailUrl: "/thumbnails/06.png",
-    youtubeVideoId: "",
+    youtubeVideoId: "xa3GHZY7k-Q",
     resources: {
       roadmap: "https://roadmap.sh/r/rdm-e4atc",
       csv: "learn.csv",
@@ -215,7 +215,7 @@ export default function Home() {
               />
             ))}
           </div>
-          
+
           <div className={styles.cryptoWalletSection}>
             <CryptoWallet />
           </div>
