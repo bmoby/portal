@@ -10,14 +10,11 @@ import {
   RoadmapModal,
   CryptoWallet,
 } from "@/components/shared";
-import { StartOverlay, DonationModal } from "@/components/shared/donations";
-import type { DonationBinaryChoice } from "@/components/shared/donations";
-import { getDonationAlertsUrl } from "@/services/donationService";
+import { StartOverlay } from "@/components/shared/donations";
 import styles from "./page.module.css";
 import { initClientTracking } from "@/helpers/tracking/initClientTracking";
 import {
   trackStartClick,
-  trackDonationChoice,
   trackVideoPlay,
   trackCsvOpen,
 } from "@/helpers/tracking/events";
@@ -124,7 +121,6 @@ export default function Home() {
     return null;
   });
   const [isStartOpen, setIsStartOpen] = useState(true);
-  const [isDonationOpen, setIsDonationOpen] = useState(false);
   const [videosUnlocked, setVideosUnlocked] = useState(false);
   const [banner, setBanner] = useState<string | null>(null);
   const [isCSVModalOpen, setIsCSVModalOpen] = useState(false);
@@ -132,17 +128,6 @@ export default function Home() {
 
   const handleStart = () => {
     trackStartClick();
-    setIsDonationOpen(true);
-  };
-
-  const handleDonationChoose = async (choice: DonationBinaryChoice) => {
-    setIsDonationOpen(false);
-    if (choice === "support") {
-      const url = getDonationAlertsUrl(undefined, "EUR");
-      window.open(url, "_blank", "noopener,noreferrer");
-    }
-    trackDonationChoice(choice);
-
     setVideosUnlocked(true);
     setIsStartOpen(false);
     setBanner("Дала аьтты бойла!");
@@ -228,12 +213,6 @@ export default function Home() {
         isOpen={!!selectedVideo}
         youtubeVideoId={selectedVideo || ""}
         onClose={handleCloseModal}
-      />
-
-      <DonationModal
-        isOpen={isDonationOpen}
-        onClose={() => setIsDonationOpen(false)}
-        onChoose={handleDonationChoose}
       />
 
       <CSVModal
